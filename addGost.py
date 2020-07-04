@@ -1,15 +1,3 @@
-''' 
-ex. ./gost -L=tcp://:443 -L=udp://:443 -F=forward+mtls://1.2.3.4:443?mbind=true
-
-Listening type: TCP or UDP
-Listening port: ?
-Transport protocol: relay or forward
-Transport method: ws, wss, mws, mwss, tls, mtls
-Target ip address: ?
-Target ip port: ?
-ws path: /?
-mbind type: ?
-'''
 # range [min, max]
 def checkNumRange(userin, min, max):
     # option must be int
@@ -27,15 +15,14 @@ while Ltype == -1:
 
 Lport = -1
 while Lport == -1:
-    print('Choose Listening port[0-65535]:')
-    Lport = checkNumRange(input(), 0, 65535)
+    Lport = checkNumRange(input("Choose Listening port[0-65535]:"), 0, 65535)
 
 TranP = -1
 while TranP == -1:
     print('Choose Transport protocol:\n1. relay\n2. forward')
     TranP = checkNumRange(input("Please have a choice:"), 1, 2)
 options = ['relay', 'forward']
-TranP = options[TranP]
+TranP = options[TranP-1]
 
 TranM = -1
 wsPath = ""
@@ -44,27 +31,18 @@ while TranM == -1:
     TranM = checkNumRange(input("Please have a choice:"), 1, 6)
     
 if TranM <= 4:
-    print("Please input ws path[default '/']\nDon't add '/' just name:")
-    wsPath = "&path=/" + input()
+    wsPath = "&path=/" + input("Please input ws path[default '/']\nDon't add '/' just name:")
 
 options = ['ws', 'wss', 'mws', 'mwss', 'tls', 'mtls']
-TranM = options[TranM]
-
-# wsPath = ""
-# if TranM <= 4:
-#     print("Please input ws path[default '/']\nDon't add '/' just name:")
-#     wsPath = "&path=/" + input()
-
+TranM = options[TranM-1]
 
 TarIPAddr = -1
 while TarIPAddr == -1:
-    print("Please input target ip address or domain: ")
-    TarIPAddr = input()
+    TarIPAddr = input("Please input target ip address or domain: ")
 
 TarIPort = -1
 while TarIPort == -1:
-    print("Please input target port[0-65535]: ")
-    TarIPort = checkNumRange(input(), 0, 65535)
+    TarIPort = checkNumRange(input("Please input target port[0-65535]: "), 0, 65535)
 
 ISmbind = -1
 while ISmbind == -1:
@@ -76,3 +54,8 @@ ISmbind = options[ISmbind-1]
 
 if Ltype == 1:
     print("./gost -L=tcp://:%d -F=%s+%s://%s:%d?mbind=%s%s"%(Lport, TranP, TranM, TarIPAddr, TarIPort, ISmbind, wsPath))    
+elif Ltype == 2:
+    print("./gost -L=udp://:%d -F=%s+%s://%s:%d?mbind=%s%s" % (Lport, TranP, TranM, TarIPAddr, TarIPort, ISmbind, wsPath))
+elif Ltype == 3:
+    print("./gost -L=tcp://:%d -L=udp://:%d -F=%s+%s://%s:%d?mbind=%s%s" % (Lport, Lport, TranP, TranM, TarIPAddr, TarIPort, ISmbind, wsPath))
+    
