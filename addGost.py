@@ -51,11 +51,17 @@ while ISmbind == -1:
 options = ['True', 'False']
 ISmbind = options[ISmbind-1]
 
+TarVPNPort = -1
+while TarVPNPort == -1:
+    TarVPNPort = checkNumRange(input("Please input target VPN server(ssr, v2ray, etc.) port[0-65535]: "), 0, 65535)
 
 if Ltype == 1:
-    print("./gost -L=tcp://:%d -F=%s+%s://%s:%d?mbind=%s%s"%(Lport, TranP, TranM, TarIPAddr, TarIPort, ISmbind, wsPath))    
+    print("./gost -L=tcp://:%d -F=%s+%s://%s:%d?mbind=%s%s" % (Lport, TranP, TranM, TarIPAddr, TarIPort, ISmbind, wsPath))
+    print("./gost -L=%s://:%d/127.0.0.1:%d?%s" % (TranM, TarIPort, TarVPNPort, wsPath))
 elif Ltype == 2:
     print("./gost -L=udp://:%d -F=%s+%s://%s:%d?mbind=%s%s" % (Lport, TranP, TranM, TarIPAddr, TarIPort, ISmbind, wsPath))
+    print("./gost -L=%s://:%d/127.0.0.1:%d?%s" % (TranM, TarIPort, TarVPNPort, wsPath))
 elif Ltype == 3:
     print("./gost -L=tcp://:%d -L=udp://:%d -F=%s+%s://%s:%d?mbind=%s%s" % (Lport, Lport, TranP, TranM, TarIPAddr, TarIPort, ISmbind, wsPath))
+    print("./gost -L=%s://:%d/127.0.0.1:%d?%s" % (TranM, TarIPort, TarVPNPort, wsPath))
     
