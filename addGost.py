@@ -1,4 +1,5 @@
 # range [min, max]
+
 def checkNumRange(userin, min, max):
     # option must be int
     if userin.isdigit():
